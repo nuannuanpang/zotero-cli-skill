@@ -369,7 +369,7 @@ Three pressure scenarios were executed with fresh subagents that had access to B
   git commit -m "docs: record zotero-cli skill GREEN test results"
   ```
   
-  *Skipped: this project is not a git repository.*
+  *Done: the `zotero-cli` skill was later pushed to `https://github.com/nuannuanpang/zotero-cli-skill`.*
 
 ---
 
@@ -470,7 +470,7 @@ Three pressure scenarios were re-run with fresh subagents instructed to follow t
   git commit -m "refactor: harden zotero-cli skill against common agent failures"
   ```
   
-  *Skipped: this project is not a git repository.*
+  *Done: the `zotero-cli` skill was later pushed to `https://github.com/nuannuanpang/zotero-cli-skill`.*
 
 ---
 
@@ -564,7 +564,7 @@ The skill now drives consistent `--json` usage and correct backend selection whe
   git commit -m "docs: finalize zotero-cli skill acceptance"
   ```
   
-  *Skipped: this project is not a git repository.*
+  *Done: the `zotero-cli` skill was later pushed to `https://github.com/nuannuanpang/zotero-cli-skill`.*
 
 ---
 
