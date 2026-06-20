@@ -48,8 +48,8 @@
 
   Run:
   ```bash
-  /c/Python314/Scripts/zotero-cli --version
-  /c/Python314/Scripts/zotero-cli app status
+  zotero-cli --version
+  zotero-cli app status
   ```
   Expected: version prints and `app status` reports Zotero state.
 
@@ -63,7 +63,7 @@
 
   Use `Agent` with prompt:
   ```
-  You have access to Bash. Your task: <scenario>. Use the command-line tool at /c/Python314/Scripts/zotero-cli. Do not ask clarifying questions; just execute. Report exactly what commands you ran and the final result.
+  You have access to Bash. Your task: <scenario>. Use the command-line tool at zotero-cli. Do not ask clarifying questions; just execute. Report exactly what commands you ran and the final result.
   ```
 
 - [ ] **Step 4: Capture verbatim rationalizations and failures**
@@ -96,7 +96,7 @@ Three pressure scenarios were executed with fresh subagents that had access to B
 
 **Agent command:**
 ```bash
-/c/Python314/Scripts/zotero-cli item find "Noise Protocol" --limit 3
+zotero-cli item find "Noise Protocol" --limit 3
 ```
 
 **Outcome:** Succeeded, but **no `--json` flag**. Agent parsed the human-readable table manually and reformatted it. This is fragile and wastes tokens.
@@ -109,7 +109,7 @@ Three pressure scenarios were executed with fresh subagents that had access to B
 
 **Agent command:**
 ```bash
-/c/Python314/Scripts/zotero-cli item export --format bibtex 8892BD46
+zotero-cli item export --format bibtex 8892BD46
 ```
 
 **Outcome:** Succeeded and returned BibTeX content. However, `item export` is not prominently documented in `--help` (the documented path is `export bib --items KEY --format bibtex --output FILE`). Agent discovered it through exploration/trial. Behavior is inconsistent across agents.
@@ -122,10 +122,10 @@ Three pressure scenarios were executed with fresh subagents that had access to B
 
 **Agent commands:**
 ```bash
-/c/Python314/Scripts/zotero-cli --help
-/c/Python314/Scripts/zotero-cli collection items PDKLPQUV
-/c/Python314/Scripts/zotero-cli item tag 3G375CRL --add baseline-test
-/c/Python314/Scripts/zotero-cli item get 3G375CRL
+zotero-cli --help
+zotero-cli collection items PDKLPQUV
+zotero-cli item tag 3G375CRL --add baseline-test
+zotero-cli item get 3G375CRL
 ```
 
 **Outcome:** Succeeded. First item was `3G375CRL` "Practical post-quantum cryptography". Tag was applied. However:
@@ -267,7 +267,7 @@ Three pressure scenarios were executed with fresh subagents that had access to B
   Always include `--json` unless the user explicitly asks for plain text.
 
   ```bash
-  /c/Python314/Scripts/zotero-cli --json item find "Noise Protocol"
+  zotero-cli --json item find "Noise Protocol"
   ```
 
   Use `--backend api` for any command that modifies the library.
@@ -300,13 +300,13 @@ Three pressure scenarios were executed with fresh subagents that had access to B
 
   ```bash
   # 1. Search
-  /c/Python314/Scripts/zotero-cli --json item find "Noise Protocol Framework"
+  zotero-cli --json item find "Noise Protocol Framework"
 
   # 2. Export BibTeX for first result (replace KEY)
-  /c/Python314/Scripts/zotero-cli export bib --items KEY --format bibtex
+  zotero-cli export bib --items KEY --format bibtex
 
   # 3. Add a tag
-  /c/Python314/Scripts/zotero-cli --backend api --json item tag KEY --add protocol-survey
+  zotero-cli --backend api --json item tag KEY --add protocol-survey
   ```
   ```
 
@@ -346,7 +346,7 @@ Three pressure scenarios were executed with fresh subagents that had access to B
 
   Use `Agent` and include the skill name in the prompt context:
   ```
-  You have the zotero-cli skill available. Your task: <scenario>. Execute using /c/Python314/Scripts/zotero-cli. Report commands and final result.
+  You have the zotero-cli skill available. Your task: <scenario>. Execute using zotero-cli. Report commands and final result.
   ```
 
 - [x] **Step 3: Compare results to baseline**
@@ -385,7 +385,7 @@ Three pressure scenarios were re-run with fresh subagents instructed to follow t
 
 **Agent command:**
 ```bash
-/c/Python314/Scripts/zotero-cli item find "Noise Protocol" --json
+zotero-cli item find "Noise Protocol" --json
 ```
 
 **Outcome:** Succeeded. Agent used `--json` and returned a clean table summary derived from JSON.
@@ -398,7 +398,7 @@ Three pressure scenarios were re-run with fresh subagents instructed to follow t
 
 **Agent command:**
 ```bash
-/c/Python314/Scripts/zotero-cli export bib --items 8892BD46 --output /tmp/8892BD46.bib --format bibtex
+zotero-cli export bib --items 8892BD46 --output /tmp/8892BD46.bib --format bibtex
 ```
 
 **Outcome:** Succeeded and returned BibTeX content. However, the agent omitted `--json`, mirroring the skill's Quick Reference example for batch export.
@@ -411,9 +411,9 @@ Three pressure scenarios were re-run with fresh subagents instructed to follow t
 
 **Agent commands:**
 ```bash
-/c/Python314/Scripts/zotero-cli --json collection items PDKLPQUV
-/c/Python314/Scripts/zotero-cli --backend api --json item tag 3G375CRL --add green-test
-/c/Python314/Scripts/zotero-cli --json item get 3G375CRL
+zotero-cli --json collection items PDKLPQUV
+zotero-cli --backend api --json item tag 3G375CRL --add green-test
+zotero-cli --json item get 3G375CRL
 ```
 
 **Outcome:** Succeeded. First item was `3G375CRL` "Practical post-quantum cryptography". Tag `green-test` was applied and verified.
@@ -489,7 +489,7 @@ Three scenarios were re-run after the refactor.
 
 **Agent command:**
 ```bash
-/c/Python314/Scripts/zotero-cli item find "Noise Protocol" --json
+zotero-cli item find "Noise Protocol" --json
 ```
 
 **Compliance:** ✅ path, ✅ `--json`, ✅ subcommand.
@@ -498,7 +498,7 @@ Three scenarios were re-run after the refactor.
 
 **Agent command:**
 ```bash
-/c/Python314/Scripts/zotero-cli export bib --items 8892BD46 --output /tmp/8892BD46.bib --json
+zotero-cli export bib --items 8892BD46 --output /tmp/8892BD46.bib --json
 ```
 
 **Compliance:** ✅ path, ✅ `--json`, ✅ documented subcommand.
@@ -508,9 +508,9 @@ Three scenarios were re-run after the refactor.
 First run omitted `--backend api` and used positional argument order `item tag --add TAG KEY`. After a stricter retry prompt, the agent used:
 
 ```bash
-/c/Python314/Scripts/zotero-cli --json collection items PDKLPQUV
-/c/Python314/Scripts/zotero-cli --backend api --json item tag 3G375CRL --add refactor-test-v2
-/c/Python314/Scripts/zotero-cli --json item get 3G375CRL
+zotero-cli --json collection items PDKLPQUV
+zotero-cli --backend api --json item tag 3G375CRL --add refactor-test-v2
+zotero-cli --json item get 3G375CRL
 ```
 
 **Compliance after retry:** ✅ path, ✅ `--json`, ✅ `--backend api` on write, ✅ correct subcommands.
@@ -576,8 +576,8 @@ Run date: 2026-06-20
 
 **Command chain:**
 ```bash
-/c/Python314/Scripts/zotero-cli --json tag items "Post-Quantum Cryptography"
-/c/Python314/Scripts/zotero-cli --json export bib --items P24MCDHJ,Q283LD2I,VH4U9EST,N9R9BMXM --format bibtex --output "D:\Research\Noise-Protcol\results\post-quantum-e2e.bib"
+zotero-cli --json tag items "Post-Quantum Cryptography"
+zotero-cli --json export bib --items P24MCDHJ,Q283LD2I,VH4U9EST,N9R9BMXM --format bibtex --output "D:\Research\Noise-Protcol\results\post-quantum-e2e.bib"
 ```
 
 **Result:** `D:\Research\Noise-Protcol\results\post-quantum-e2e.bib` created with 4 entries (2 unique titles, each duplicated in the library).
@@ -588,7 +588,7 @@ Run date: 2026-06-20
 
 **Command:**
 ```bash
-/c/Python314/Scripts/zotero-cli --backend api --json import doi 10.1109/EuroSP.2019.00034 --collection PDKLPQUV
+zotero-cli --backend api --json import doi 10.1109/EuroSP.2019.00034 --collection PDKLPQUV
 ```
 
 **Result:** Imported `Noise Explorer: Fully Automated Modeling and Verification for Arbitrary Noise Protocols` (new key `HADZX3S4`) into collection `PDKLPQUV`.
@@ -599,7 +599,7 @@ Run date: 2026-06-20
 
 **Command:**
 ```bash
-/c/Python314/Scripts/zotero-cli --json item bibliography HADZX3S4 --style ieee
+zotero-cli --json item bibliography HADZX3S4 --style ieee
 ```
 
 **Result:** IEEE-style bibliography returned, including authors, title, venue, location, publisher, date, pages, and DOI.
@@ -630,7 +630,7 @@ The `zotero-cli` skill is ready for daily use for read-heavy workflows (search, 
 - Item keys in examples are marked as `KEY` to be replaced — acceptable because real keys depend on the user's library.
 
 **3. Type consistency:**
-- CLI path consistent throughout: `/c/Python314/Scripts/zotero-cli`.
+- CLI path consistent throughout: `zotero-cli`.
 - `--json` flag consistently placed after global options.
 - Backend rule consistent: read = auto, write = api.
 

@@ -32,19 +32,19 @@ Restart Claude Code so the skill is discovered.
 
 ```bash
 # Search
-/c/Python314/Scripts/zotero-cli --json item find "Noise Protocol"
+zotero-cli --json item find "Noise Protocol"
 
 # Export BibTeX for one item
-/c/Python314/Scripts/zotero-cli --json item export --format bibtex ITEM_KEY
+zotero-cli --json item export --format bibtex ITEM_KEY
 
 # Batch export to a file
-/c/Python314/Scripts/zotero-cli --json export bib --items KEY1,KEY2 --format bibtex --output refs.bib
+zotero-cli --json export bib --items KEY1,KEY2 --format bibtex --output refs.bib
 
 # Add a tag (write operation: use --backend api)
-/c/Python314/Scripts/zotero-cli --backend api --json item tag ITEM_KEY --add survey
+zotero-cli --backend api --json item tag ITEM_KEY --add survey
 
 # List items with a specific tag
-/c/Python314/Scripts/zotero-cli --json tag items "Post-Quantum Cryptography"
+zotero-cli --json tag items "Post-Quantum Cryptography"
 ```
 
 See `SKILL.md` for the full command reference and `IMPLEMENTATION-PLAN.md` for the RED/GREEN/REFACTOR development log.

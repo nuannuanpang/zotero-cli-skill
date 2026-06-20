@@ -18,7 +18,7 @@ Do not use for web search.
 
 ## Prerequisites
 
-- `zotero-cli` is installed at `C:\Python314\Scripts\zotero-cli`.
+- `zotero-cli` is installed and available on your PATH (e.g., `C:\Python314\Scripts` is in your `PATH`).
 - Read-only commands use `--backend auto` (SQLite).
 - Write commands require `--backend api` and Zotero running with Local API enabled.
 
@@ -27,13 +27,13 @@ Do not use for web search.
 Always include `--json` unless the user asks for plain text. Place it right after `zotero-cli`.
 
 ```bash
-/c/Python314/Scripts/zotero-cli --json item find "Noise Protocol"
+zotero-cli --json item find "Noise Protocol"
 ```
 
 Use `--backend api` for any command that modifies the library.
 
 ```bash
-/c/Python314/Scripts/zotero-cli --backend api --json item tag KEY --add survey
+zotero-cli --backend api --json item tag KEY --add survey
 ```
 
 ## Quick Reference
@@ -69,16 +69,16 @@ Use `--backend api` for any command that modifies the library.
 
 ```bash
 # Search
-/c/Python314/Scripts/zotero-cli --json item find "Noise Protocol Framework"
+zotero-cli --json item find "Noise Protocol Framework"
 
 # Export BibTeX for the first result (replace KEY)
-/c/Python314/Scripts/zotero-cli --json item export --format bibtex KEY
+zotero-cli --json item export --format bibtex KEY
 
 # Or batch-export several items to a file
-/c/Python314/Scripts/zotero-cli --json export bib --items KEY1,KEY2 --format bibtex --output refs.bib
+zotero-cli --json export bib --items KEY1,KEY2 --format bibtex --output refs.bib
 
 # Add a tag
-/c/Python314/Scripts/zotero-cli --backend api --json item tag KEY --add protocol-survey
+zotero-cli --backend api --json item tag KEY --add protocol-survey
 ```
 
 ## Red Flags — STOP
