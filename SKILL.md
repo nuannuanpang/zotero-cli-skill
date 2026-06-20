@@ -136,7 +136,32 @@ zotero-cli --backend api --json sync
 
 # Automatically find missing PDFs for a collection
 zotero-cli --backend api --json collection find-pdfs COLLECTION_KEY
+
+# Enrich an existing item from its PDF (English abstract/tags)
+# Step 1: extract PDF to Markdown with marker_single
+# Step 2: parse Abstract/Keywords from the Markdown
+# Step 3: write back with zotero-cli js
+zotero-cli --backend api --json js "return (async function() {
+  var item = Zotero.Items.getByLibraryAndKey(1, 'KEY');
+  item.setField('abstractNote', 'Extracted abstract text...');
+  item.addTag('keyword-one');
+  item.addTag('keyword-two');
+  await item.saveTx();
+  return { key: item.key, abstractNote: item.getField('abstractNote'), tags: item.getTags().map(t => t.tag) };
+})();" --wait 15
 ```
+
+## Enrich Workflow
+
+To automatically populate `abstractNote` and tags from a PDF:
+
+1. Locate the PDF path via `item context KEY`.
+2. Convert PDF to Markdown with `marker_single` (local, free) or `firecrawl parse` (costs credits).
+3. Extract the English abstract and keywords from the Markdown.
+4. Write back using `zotero-cli --backend api js` with `item.setField('abstractNote', ...)` and `item.addTag(...)`.
+5. Verify with `item get KEY`.
+
+Known limitation on Windows: Chinese characters written through the CLI Bridge plugin may become garbled. Use English abstracts/tags until the plugin encoding issue is fixed.
 
 ## Red Flags — STOP
 
@@ -146,3 +171,4 @@ zotero-cli --backend api --json collection find-pdfs COLLECTION_KEY
 - Parsing human-readable output without `--json`.
 - Guessing subcommand names instead of using the Quick Reference table.
 - Using the Zotero MCP server while it is failing.
+- Writing non-ASCII characters through `zotero-cli js` on Windows without warning the user about the CLI Bridge encoding bug.
