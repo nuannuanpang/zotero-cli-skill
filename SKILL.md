@@ -1,6 +1,6 @@
 ---
 name: zotero-cli
-description: Use when the user asks to interact with the local Zotero library from the command line, including searching items, semantic search, exporting citations or BibTeX, managing tags and collections, reading notes or annotations, or adding new references. Use when the Zotero MCP server is unavailable or unreliable.
+description: Use when the user asks to interact with the local Zotero library from the command line, including searching items, semantic search, full-text search, reading notes or annotations, AI analysis of papers, exporting citations or BibTeX, importing references by DOI/PMID/file, managing tags and collections, finding duplicates, syncing, or adding new references. Use when the Zotero MCP server is unavailable or unreliable.
 ---
 
 # zotero-cli
@@ -44,6 +44,11 @@ zotero-cli --backend api --json item tag KEY --add survey
 | Semantic search | `item semantic-search "QUERY" --top-k 10 --json` |
 | Find similar items | `item similar KEY --top-k 10 --json` |
 | Build semantic index | `item build-index --json` |
+| Full-text search in PDFs | `item search-fulltext "QUERY" --limit 10 --json` |
+| Search annotations | `item search-annotations "QUERY" --limit 10 --json` |
+| Read annotations/highlights | `item annotations KEY --json` |
+| AI analyze paper | `--backend api item analyze KEY --question "..." --model MODEL --json` |
+| Get item context | `item context KEY --include-notes --include-bibtex --json` |
 | Get item metadata | `item get KEY --json` |
 | In-text citation | `item citation KEY --style ieee --json` |
 | Bibliography entry | `item bibliography KEY --style ieee --json` |
@@ -51,12 +56,16 @@ zotero-cli --backend api --json item tag KEY --add survey
 | Batch BibTeX to file | `export bib --items KEY1,KEY2 --format bibtex --output refs.bib --json` |
 | List collections | `collection list --json` |
 | List collection items | `collection items KEY --json` |
+| Find PDFs for collection | `--backend api collection find-pdfs KEY --json` |
 | List items by tag | `tag items "TAG NAME" --json` |
 | Read item notes | `item notes KEY --json` |
-| Read item annotations | `item annotations KEY --json` |
 | Add tag | `--backend api item tag KEY --add TAG --json` |
 | Add note | `--backend api note add KEY --text "..." --json` |
-| Import DOI | `--backend api import doi DOI --collection KEY --json` |
+| Import by DOI | `--backend api import doi DOI --collection KEY --json` |
+| Import by PMID | `--backend api import pmid PMID --collection KEY --json` |
+| Import local PDF/file | `--backend api import file PATH --collection KEY --json` |
+| Find duplicate items | `--backend api item duplicates --limit 50 --json` |
+| Sync Zotero library | `--backend api sync --json` |
 
 ## Common Errors
 
@@ -67,6 +76,8 @@ zotero-cli --backend api --json item tag KEY --add survey
 | `Backend sqlite cannot write` | Add `--backend api` and ensure Zotero is running. |
 | Empty JSON array on search | Broaden the query or check `collection list` for the right key. |
 | `Semantic search index not found` | Run `item build-index --json` first. |
+| `OPENAI_API_KEY is not set` | `item analyze` requires an OpenAI API key; use `item context` for model-independent output. |
+| `No PDF found` for full-text/annotations | Ensure the item has an attached PDF. |
 | Citation returns only `[1]` | Use `item bibliography` for the full reference. |
 
 ## Example
@@ -84,6 +95,21 @@ zotero-cli --json item similar KEY --top-k 10
 # Build or rebuild the semantic search index
 zotero-cli --json item build-index
 
+# Full-text search inside attached PDFs
+zotero-cli --json item search-fulltext "Diffie-Hellman" --limit 10
+
+# Search annotations across the library
+zotero-cli --json item search-annotations "key management" --limit 10
+
+# Read highlights/annotations of a specific paper
+zotero-cli --json item annotations KEY
+
+# Get complete context for a paper (notes + BibTeX + metadata)
+zotero-cli --json item context KEY --include-notes --include-bibtex
+
+# AI analyze a paper (requires OPENAI_API_KEY)
+zotero-cli --backend api --json item analyze KEY --question "What are the main contributions?" --model gpt-4o-mini
+
 # Export BibTeX for the first result (replace KEY)
 zotero-cli --json item export --format bibtex KEY
 
@@ -92,6 +118,24 @@ zotero-cli --json export bib --items KEY1,KEY2 --format bibtex --output refs.bib
 
 # Add a tag
 zotero-cli --backend api --json item tag KEY --add protocol-survey
+
+# Import a paper by DOI into a collection
+zotero-cli --backend api --json import doi "10.1000/example" --collection COLLECTION_KEY --tag unread
+
+# Import a paper by PMID
+zotero-cli --backend api --json import pmid 12345678 --collection COLLECTION_KEY
+
+# Import a local PDF
+zotero-cli --backend api --json import file "/path/to/paper.pdf" --collection COLLECTION_KEY
+
+# Find duplicate items
+zotero-cli --backend api --json item duplicates --limit 50
+
+# Trigger Zotero sync
+zotero-cli --backend api --json sync
+
+# Automatically find missing PDFs for a collection
+zotero-cli --backend api --json collection find-pdfs COLLECTION_KEY
 ```
 
 ## Red Flags — STOP
