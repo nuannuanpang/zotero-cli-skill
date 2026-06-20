@@ -1,6 +1,6 @@
 ---
 name: zotero-cli
-description: Use when the user asks to interact with the local Zotero library from the command line, including searching items, exporting citations or BibTeX, managing tags and collections, reading notes or annotations, or adding new references. Use when the Zotero MCP server is unavailable or unreliable.
+description: Use when the user asks to interact with the local Zotero library from the command line, including searching items, semantic search, exporting citations or BibTeX, managing tags and collections, reading notes or annotations, or adding new references. Use when the Zotero MCP server is unavailable or unreliable.
 ---
 
 # zotero-cli
@@ -41,6 +41,9 @@ zotero-cli --backend api --json item tag KEY --add survey
 | Task | Command |
 |------|---------|
 | Search items | `item find "QUERY" --json` |
+| Semantic search | `item semantic-search "QUERY" --top-k 10 --json` |
+| Find similar items | `item similar KEY --top-k 10 --json` |
+| Build semantic index | `item build-index --json` |
 | Get item metadata | `item get KEY --json` |
 | In-text citation | `item citation KEY --style ieee --json` |
 | Bibliography entry | `item bibliography KEY --style ieee --json` |
@@ -63,6 +66,7 @@ zotero-cli --backend api --json item tag KEY --add survey
 | `Item not found` | Verify the key with `item find "title" --json`. |
 | `Backend sqlite cannot write` | Add `--backend api` and ensure Zotero is running. |
 | Empty JSON array on search | Broaden the query or check `collection list` for the right key. |
+| `Semantic search index not found` | Run `item build-index --json` first. |
 | Citation returns only `[1]` | Use `item bibliography` for the full reference. |
 
 ## Example
@@ -70,6 +74,15 @@ zotero-cli --backend api --json item tag KEY --add survey
 ```bash
 # Search
 zotero-cli --json item find "Noise Protocol Framework"
+
+# Semantic search (requires index)
+zotero-cli --json item semantic-search "post-quantum key exchange for satellites" --top-k 10
+
+# Find items similar to a known item
+zotero-cli --json item similar KEY --top-k 10
+
+# Build or rebuild the semantic search index
+zotero-cli --json item build-index
 
 # Export BibTeX for the first result (replace KEY)
 zotero-cli --json item export --format bibtex KEY
